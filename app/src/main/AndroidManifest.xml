@@ -48,7 +48,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
-                <action android:name="android.intent.action.SECOND" />
+                <action android:name="android.intent.action.MAINACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

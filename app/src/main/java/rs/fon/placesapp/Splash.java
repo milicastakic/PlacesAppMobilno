@@ -12,19 +12,19 @@ import android.widget.Button;
 
 public class Splash extends Activity {
 
+    Button start1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
-        Button start1;
 
         start1= (Button)findViewById(R.id.start);
         start1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(Splash.this, MapsActivity.class);
-                Splash.this.startActivity(intent);
+                startActivity(intent);
             }
         });
     }
