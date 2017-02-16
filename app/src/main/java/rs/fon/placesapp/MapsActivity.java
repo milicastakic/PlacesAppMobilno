@@ -6,8 +6,13 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,7 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -206,6 +211,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -238,6 +244,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // You can add here other case statements according to your requirement.
         }
     }
+
+    @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
@@ -246,8 +254,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        } else {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
@@ -264,10 +270,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return (googlePlacesUrl.toString());
     }
 
+    @Override
     public void onConnectionSuspended(int i) {
 
     }
 
+    @Override
     public void onLocationChanged(Location location) {
         Log.d("onLocationChanged", "entered");
 
@@ -302,7 +310,117 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String url = "";
+        Object[] DataTransfer;
+        GetNearbyPlacesData getNearbyPlacesData;
+        switch (item.getItemId()){
+            case R.id.hibridMap:
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                return true;
+            case R.id.normalMap:
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                return true;
+            case R.id.bankeId:
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                url = getUrl(latitude, longitude, "bank");
+                DataTransfer = new Object[2];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                Log.d("onClick", url);
+                getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsActivity.this,"Banke u blizini", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.restoraniId:
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                url = getUrl(latitude, longitude, "restaurant");
+                DataTransfer = new Object[2];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                Log.d("onClick", url);
+                getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsActivity.this,"Restorani u blizini", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.parkoviId:
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                url = getUrl(latitude, longitude, "park");
+                DataTransfer = new Object[2];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                Log.d("onClick", url);
+                getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsActivity.this,"Parkovi u blizini", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.skoleId:
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                url = getUrl(latitude, longitude, "school");
+                DataTransfer = new Object[2];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                Log.d("onClick", url);
+                getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsActivity.this,"Škole u blizini", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.teretanaId:
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                url = getUrl(latitude, longitude, "gym");
+                DataTransfer = new Object[2];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                Log.d("onClick", url);
+                getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsActivity.this,"Teretane u blizini", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.nocniId:
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                url = getUrl(latitude, longitude, "night_club");
+                DataTransfer = new Object[2];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                Log.d("onClick", url);
+                getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsActivity.this,"Noćni klubovi u blizini", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.galerijeId:
+                Log.d("onClick", "Button is Clicked");
+                mMap.clear();
+                url = getUrl(latitude, longitude, "art_gallery");
+                DataTransfer = new Object[2];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                Log.d("onClick", url);
+                getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+                Toast.makeText(MapsActivity.this,"Galerije u blizini", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 }
