@@ -24,7 +24,7 @@
             <item android:id="@+id/teretanaId"
                 android:title="Teretane" />
             <item android:id="@+id/nocniId"
-                android:title="Noćni klub" />
+                android:title="Noćni klubovi" />
             <item android:id="@+id/bankeId"
                 android:title="Banke" />
             <item android:id="@+id/galerijeId"
