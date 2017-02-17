@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/mapView"
+        android:title="Promeni izgled mape">
+        <menu>
+            <item android:id="@+id/hibridMap"
+                android:title="Hibrid" />
+            <item android:id="@+id/normalMap"
+                android:title="Normal" />
+        </menu>
+    </item>
+
+    <item android:id="@+id/nearPlace"
+        android:title="Prikazi mesta u blizini">
+        <menu>
+            <item android:id="@+id/restoraniId"
+                android:title="Restorani" />
+            <item android:id="@+id/parkoviId"
+                android:title="Parkovi" />
+            <item android:id="@+id/skoleId"
+                android:title="Škole" />
+            <item android:id="@+id/teretanaId"
+                android:title="Teretane" />
+            <item android:id="@+id/nocniId"
+                android:title="Noćni klub" />
+            <item android:id="@+id/bankeId"
+                android:title="Banke" />
+            <item android:id="@+id/galerijeId"
+                android:title="Galerije" />
+        </menu>
+    </item>
+
+</menu>
