@@ -57,12 +57,20 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String>{
             double lng = Double.parseDouble(googlePlace.get("lng"));
             String placeName = googlePlace.get("place_name");
             String vicinity = googlePlace.get("vicinity");
+           // double rating = Double.parseDouble(googlePlace.get("rating"));
+            String rating = googlePlace.get("rating");
+            String open_now = googlePlace.get("open_now");
+            String open = "nije";
+            if(open_now.equals(true)){
+                open = "jeste";
+            }
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             markerOptions.title(placeName + " : " + vicinity);
             mMap.addMarker(markerOptions);
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             //move map camera
+
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
         }

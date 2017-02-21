@@ -54,6 +54,8 @@ public class DataParser {
         HashMap<String, String> googlePlaceMap = new HashMap<String, String>();
         String placeName = "-NA-";
         String vicinity = "-NA-";
+        String rating = "nema";
+        String opening_hours = "nema podataka";
         String latitude = "";
         String longitude = "";
         String reference = "";
@@ -67,11 +69,19 @@ public class DataParser {
             if (!googlePlaceJson.isNull("vicinity")) {
                 vicinity = googlePlaceJson.getString("vicinity");
             }
+            if (!googlePlaceJson.isNull("rating")) {
+                rating = googlePlaceJson.getString("rating");
+            }
+            if (!googlePlaceJson.isNull("opening_hours")) {
+                opening_hours = googlePlaceJson.getJSONObject("opening_hours").getString("open_now");
+            }
             latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = googlePlaceJson.getString("reference");
             googlePlaceMap.put("place_name", placeName);
             googlePlaceMap.put("vicinity", vicinity);
+            googlePlaceMap.put("rating", rating);
+            googlePlaceMap.put("open_now", opening_hours);
             googlePlaceMap.put("lat", latitude);
             googlePlaceMap.put("lng", longitude);
             googlePlaceMap.put("reference", reference);

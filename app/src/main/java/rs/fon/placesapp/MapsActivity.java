@@ -1,5 +1,6 @@
 package rs.fon.placesapp;
 
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -10,19 +11,28 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,7 +50,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     double latitude;
     double longitude;
-    private int PROXIMITY_RADIUS = 10000;
+    private int PROXIMITY_RADIUS = 1000;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
@@ -90,6 +100,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
+
     }
 
 
@@ -120,7 +131,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
+
         }
+
 
 
     }
@@ -210,7 +223,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
         googlePlacesUrl.append("&type=" + nearbyPlace);
         googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key=" + "AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0");
+        //AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0
+        googlePlacesUrl.append("&key=" + "AIzaSyBm6kqWwPUF9O77ZlLme1WOG9ZQa0LvWNU");
         Log.d("getUrl", googlePlacesUrl.toString());
         return (googlePlacesUrl.toString());
     }
@@ -235,14 +249,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Current Position");
+        markerOptions.title("Trenutna pozicija");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-        Toast.makeText(MapsActivity.this,"Your Current Location", Toast.LENGTH_LONG).show();
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        Toast.makeText(MapsActivity.this,"Trenutna pozicija", Toast.LENGTH_LONG).show();
 
         Log.d("onLocationChanged", String.format("latitude:%.3f longitude:%.3f",latitude,longitude));
 
@@ -269,9 +283,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String url = "";
-        Object[] DataTransfer;
-        GetNearbyPlacesData getNearbyPlacesData;
+
         switch (item.getItemId()){
             case R.id.hibridMap:
                 mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -282,37 +294,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.bankeId:
                 Log.d("onClick", "Button is Clicked");
                 mMap.clear();
-                url = getUrl(latitude, longitude, "bank");
-                DataTransfer = new Object[2];
+                String url = getUrl(latitude, longitude, "bank");
+                Object[] DataTransfer = new Object[2];
                 DataTransfer[0] = mMap;
                 DataTransfer[1] = url;
                 Log.d("onClick", url);
-                getNearbyPlacesData = new GetNearbyPlacesData();
+                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
                 getNearbyPlacesData.execute(DataTransfer);
                 Toast.makeText(MapsActivity.this,"Banke u blizini", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.restoraniId:
                 Log.d("onClick", "Button is Clicked");
                 mMap.clear();
-                url = getUrl(latitude, longitude, "restaurant");
-                DataTransfer = new Object[2];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                Log.d("onClick", url);
-                getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
+                String url1 = getUrl(latitude, longitude, "restaurant");
+                Object[] DataTransfer1 = new Object[2];
+                DataTransfer1[0] = mMap;
+                DataTransfer1[1] = url1;
+                Log.d("onClick", url1);
+                GetNearbyPlacesData getNearbyPlacesData1 = new GetNearbyPlacesData();
+                getNearbyPlacesData1.execute(DataTransfer1);
                 Toast.makeText(MapsActivity.this,"Restorani u blizini", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.parkoviId:
                 Log.d("onClick", "Button is Clicked");
                 mMap.clear();
-                url = getUrl(latitude, longitude, "park");
-                DataTransfer = new Object[2];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                Log.d("onClick", url);
-                getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
+                String url2 = getUrl(latitude, longitude, "park");
+                Object[] DataTransfer2 = new Object[2];
+                DataTransfer2[0] = mMap;
+                DataTransfer2[1] = url2;
+                Log.d("onClick", url2);
+                GetNearbyPlacesData getNearbyPlacesData2 = new GetNearbyPlacesData();
+                getNearbyPlacesData2.execute(DataTransfer2);
                 Toast.makeText(MapsActivity.this,"Parkovi u blizini", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.skoleId:
@@ -368,4 +380,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
+
 }
